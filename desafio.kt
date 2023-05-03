@@ -2,20 +2,62 @@
 
 enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
 
-class Usuario
+class Usuario(val nome: String)
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class ConteudoEducacional(val nome: String, val duracao: Int = 60)
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+data class Formacao(val nome: String, val nivel: Nivel) {
+    private val conteudos = mutableListOf<ConteudoEducacional>()
+    private val inscritos = mutableListOf<Usuario>()
 
-    val inscritos = mutableListOf<Usuario>()
-    
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun adicionarConteudo(conteudo: ConteudoEducacional) {
+        conteudos.add(conteudo)
+    }
+
+    fun removerConteudo(conteudo: ConteudoEducacional) {
+        conteudos.remove(conteudo)
+    }
+
+    fun exibirConteudos() {
+        conteudos.forEach { println(it.nome) }
+    }
+
+    fun inscrever(usuario: Usuario) {
+        inscritos.add(usuario)
+    }
+
+    fun cancelarInscricao(usuario: Usuario) {
+        inscritos.remove(usuario)
+    }
+
+    fun exibirInscritos() {
+        inscritos.forEach { println(it.nome) }
     }
 }
 
 fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+    val usuario1 = Usuario("Carlo")
+    val usuario2 = Usuario("Isabela")
+
+    val conteudo1 = ConteudoEducacional("Kotlin para iniciantes")
+    val conteudo2 = ConteudoEducacional("Kotlin intermediário")
+    val conteudo3 = ConteudoEducacional("Kotlin avançado")
+
+    val formacao1 = Formacao("Desenvolvimento Android com Kotlin", Nivel.INTERMEDIARIO)
+    formacao1.adicionarConteudo(conteudo1)
+    formacao1.adicionarConteudo(conteudo2)
+
+    val formacao2 = Formacao("Desenvolvimento Web com Kotlin", Nivel.BASICO)
+    formacao2.adicionarConteudo(conteudo1)
+    formacao2.adicionarConteudo(conteudo3)
+
+    formacao1.inscrever(usuario1)
+    formacao1.inscrever(usuario2)
+    formacao2.inscrever(usuario1)
+
+    formacao1.exibirInscritos()
+    formacao1.cancelarInscricao(usuario2)
+    formacao1.exibirInscritos()
+
+    formacao2.exibirConteudos()
 }
